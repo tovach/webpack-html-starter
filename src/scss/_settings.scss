@@ -2,17 +2,47 @@ html {
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 *,
-*::before,
-*::after {
+*::after,
+*::before {
   box-sizing: inherit;
 }
 
-body {
-  overflow-anchor: none;
-  font-family: "asd", sans-serif;
-  background-color: var(--color-white);
-  scroll-behavior: smooth;
+a {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+
+picture {
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 img {
@@ -24,37 +54,14 @@ a {
   color: inherit;
 }
 
-.site-container {
-  overflow: hidden;
-}
-
-.is-hidden {
-  display: none !important; // stylelint-disable-line declaration-no-important
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 165px;
 }
 
 .visually-hidden {
   @include visually-hidden;
 }
 
-.btn-reset {
-  border: none;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-}
 
-.list-reset {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  margin: 0 auto;
-  padding: 0 15px;
-  max-width: 1200px;
-}
-
-.js-focus-visible :focus:not(.focus-visible) {
-  outline: none;
-}
