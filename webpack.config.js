@@ -48,13 +48,6 @@ const generateHtmlPlugins = (templateDir) => {
 
 const plugins = () => {
   const basePlugins = [
-    new HTMLWebpackPlugin({
-      template: path.resolve(__dirname, 'src/index.html'),
-      filename: 'index.html',
-      minify: {
-        collapseWhitespace: isProd
-      }
-    }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: `./css/${filename('css')}`
