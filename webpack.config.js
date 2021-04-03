@@ -5,7 +5,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack');
+const ImageminPlugin = require('image-minimizer-webpack-plugin');
+const fs = require('fs');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -29,6 +30,22 @@ const optimization = () => {
   return configObj;
 };
 
+const generateHtmlPlugins = (templateDir) => {
+  const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
+  return templateFiles.map(item => {
+    const parts = item.split('.');
+    const name = parts[0];
+    const extension = parts[1];
+    return new HTMLWebpackPlugin({
+      filename: `${name}.html`,
+      template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
+      minify: {
+        collapseWhitespace: isProd
+      }
+    })
+  })
+}
+
 const plugins = () => {
   const basePlugins = [
     new HTMLWebpackPlugin({
@@ -47,14 +64,14 @@ const plugins = () => {
         {from: path.resolve(__dirname, 'src/assets') , to: path.resolve(__dirname, 'app')}
       ]
     }),
-  ];
+  ].concat(generateHtmlPlugins(path.resolve(__dirname, 'src/pages')));
 
   if (isProd) {
     basePlugins.push(
-      new ImageminPlugin({
-        bail: false, // Ignore errors on corrupted images
-        cache: true,
-        imageminOptions: {
+      new ImageminPlugin({    
+        minimizerOptions: {
+          bail: false, // Ignore errors on corrupted images
+          cache: true,
           plugins: [
             ["gifsicle", { interlaced: true }],
             ["jpegtran", { progressive: true }],
@@ -81,7 +98,7 @@ const plugins = () => {
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
-  entry: './js/main.js',
+  entry: ['./js/main.js', './scss/main.scss'],
   output: {
     filename: `./js/${filename('js')}`,
     path: path.resolve(__dirname, 'app'),
